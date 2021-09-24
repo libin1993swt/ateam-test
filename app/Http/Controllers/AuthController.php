@@ -55,9 +55,15 @@ class AuthController extends Controller {
      */
     public function postRegistration(Request $request) {  
         $request->validate([
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'gender' => 'required',
+            'dob' => 'required|date_format:d-m-Y|date|before:-18 years',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
+        ],
+        [
+            'dob.before' => 'User must have 18 years old.',
         ]);
            
         $data = $request->all();
@@ -86,8 +92,11 @@ class AuthController extends Controller {
      */
     public function create(array $data) {
       return User::create([
-        'name' => $data['name'],
+        'first_name' => $data['first_name'],
+        'last_name' => $data['last_name'],
         'email' => $data['email'],
+        'gender' => $data['gender'],
+        'dob' => date('Y-m-d',strtotime($data['dob'])),
         'password' => Hash::make($data['password'])
       ]);
     }
