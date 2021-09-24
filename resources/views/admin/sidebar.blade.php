@@ -19,6 +19,13 @@
                     </a>
                 </li>
             </ul>
+            <ul class="nav" role="tablist">
+                <li>
+                    <a href="{{ url('/admin/marks') }}">
+                        Events
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

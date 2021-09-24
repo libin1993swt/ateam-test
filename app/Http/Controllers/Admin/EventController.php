@@ -10,7 +10,7 @@ use App\Models\Mark;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
-class MarksController extends Controller
+class EventController extends Controller
 {
     use StudentTrait;
     /**
