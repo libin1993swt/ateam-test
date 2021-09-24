@@ -37,6 +37,7 @@ class ComposerStaticInita39edc3ae1efc3f2a9aa912ef6e142d2
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'ed962a97bd972bc82007176b647d4e36' => __DIR__ . '/..' . '/facade/ignition/src/helpers.php',
+        'a0b9d7c1080ee4785ca0532f74cd79a2' => __DIR__ . '/../..' . '/app/Helper/CommonHelper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -542,6 +543,7 @@ class ComposerStaticInita39edc3ae1efc3f2a9aa912ef6e142d2
         'App\\Http\\Controllers\\Admin\\CountryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CountryController.php',
         'App\\Http\\Controllers\\Admin\\MarksController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/MarksController.php',
         'App\\Http\\Controllers\\Admin\\StudentsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/StudentsController.php',
+        'App\\Http\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
@@ -553,12 +555,6 @@ class ComposerStaticInita39edc3ae1efc3f2a9aa912ef6e142d2
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Traits\\StudentTrait' => __DIR__ . '/../..' . '/app/Http/Traits/StudentTrait.php',
-        'App\\Models\\Country' => __DIR__ . '/../..' . '/app/Models/Country.php',
-        'App\\Models\\Mark' => __DIR__ . '/../..' . '/app/Models/Mark.php',
-        'App\\Models\\State' => __DIR__ . '/../..' . '/app/Models/State.php',
-        'App\\Models\\Student' => __DIR__ . '/../..' . '/app/Models/Student.php',
-        'App\\Models\\Subject' => __DIR__ . '/../..' . '/app/Models/Subject.php',
-        'App\\Models\\Term' => __DIR__ . '/../..' . '/app/Models/Term.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
