@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layout')
 
 @section('content')
     <div class="container">
@@ -7,9 +7,9 @@
 
             <div class="col-md-9">
                 <div class="card">
-                    <div class="card-header">Edit Student #{{ $student->id }}</div>
+                    <div class="card-header">Create New Events</div>
                     <div class="card-body">
-                        <a href="{{ url('/admin/students') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <a href="{{ url('events') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                         <br />
                         <br />
 
@@ -21,11 +21,10 @@
                             </ul>
                         @endif
 
-                        <form method="POST" action="{{ url('/admin/students/' . $student->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
-                            {{ method_field('PATCH') }}
+                        <form method="POST" action="{{ url('events/create') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                             {{ csrf_field() }}
 
-                            @include ('admin.students.form', ['formMode' => 'edit'])
+                            @include ('admin.events.form', ['formMode' => 'create'])
 
                         </form>
 

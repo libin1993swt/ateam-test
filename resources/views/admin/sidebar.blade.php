@@ -6,22 +6,8 @@
 
         <div class="card-body">
             <ul class="nav" role="tablist">
-                <li role="presentation">
-                    <a href="{{ url('/admin/students') }}">
-                        Students
-                    </a>
-                </li>
-            </ul>
-            <ul class="nav" role="tablist">
                 <li>
-                    <a href="{{ url('/admin/marks') }}">
-                        Marks
-                    </a>
-                </li>
-            </ul>
-            <ul class="nav" role="tablist">
-                <li>
-                    <a href="{{ url('/admin/marks') }}">
+                    <a href="{{ url('events') }}">
                         Events
                     </a>
                 </li>

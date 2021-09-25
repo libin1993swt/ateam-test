@@ -6,13 +6,35 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Traits\StudentTrait;
 
-use App\Models\Mark;
-use App\Models\Student;
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
     use StudentTrait;
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function list(Request $request)
+    {
+        $keyword = $request->get('search');
+        $perPage = 25;
+
+        if (!empty($keyword)) {
+            $events = Event::where('student_id', 'LIKE', "%$keyword%")
+                ->orWhere('mark', 'LIKE', "%$keyword%")
+                ->orWhere('subject', 'LIKE', "%$keyword%")
+                ->orWhere('term', 'LIKE', "%$keyword%")
+                ->latest()->paginate($perPage);
+        } else {
+            $events = Event::latest()->paginate($perPage);
+        }
+        return view('admin.events.list', compact('events'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,16 +46,15 @@ class EventController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $marks = Mark::where('student_id', 'LIKE', "%$keyword%")
+            $events = Event::where('student_id', 'LIKE', "%$keyword%")
                 ->orWhere('mark', 'LIKE', "%$keyword%")
                 ->orWhere('subject', 'LIKE', "%$keyword%")
                 ->orWhere('term', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $marks = Mark::with('student')->latest()->paginate($perPage);
+            $events = Event::latest()->paginate($perPage);
         }
-        // dd($marks);
-        return view('admin.marks.index', compact('marks'));
+        return view('admin.events.index', compact('events'));
     }
 
     /**
@@ -43,10 +64,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        $terms = $this->getTerms();
-        $subjects = $this->getSubjects();
-        $students = Student::orderBy('name','asc')->get();
-        return view('admin.marks.create',compact('terms','subjects','students'));
+        return view('admin.events.create');
     }
 
     /**
@@ -58,12 +76,19 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $requestData = $request->all();
-        
-        Mark::create($requestData);
+        $request->validate([
+            'name' => 'required',
+            'start_date' => 'required|date_format:d-m-Y|date',
+            'end_date' => 'required|date_format:d-m-Y|date'
+        ]);
 
-        return redirect('admin/marks')->with('flash_message', 'Mark added!');
+        $requestData = $request->all();
+        $requestData['start_date'] = date('Y-m-d',strtotime($requestData['start_date']));
+        $requestData['end_date'] = date('Y-m-d',strtotime($requestData['end_date']));
+        
+        Event::create($requestData);
+
+        return redirect('events')->with('flash_message', 'Event added!');
     }
 
     /**
@@ -75,9 +100,9 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $mark = Mark::findOrFail($id);
+        $event = Event::findOrFail($id);
 
-        return view('admin.marks.show', compact('mark'));
+        return view('admin.events.show', compact('event'));
     }
 
     /**
@@ -89,11 +114,8 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $mark = Mark::findOrFail($id);
-        $terms = $this->getTerms();
-        $subjects = $this->getSubjects();
-        $students = Student::orderBy('name','asc')->get();
-        return view('admin.marks.edit', compact('mark','terms','subjects','students'));
+        $event = Event::findOrFail($id);
+        return view('admin.events.edit',compact('event'));
     }
 
     /**
@@ -108,11 +130,18 @@ class EventController extends Controller
     {
         
         $requestData = $request->all();
-        
-        $mark = Mark::findOrFail($id);
-        $mark->update($requestData);
+        $request->validate([
+            'name' => 'required',
+            'start_date' => 'required|date_format:d-m-Y|date',
+            'end_date' => 'required|date_format:d-m-Y|date'
+        ]);
 
-        return redirect('admin/marks')->with('flash_message', 'Mark updated!');
+        $event = Event::findOrFail($id);
+        $requestData['start_date'] = date('Y-m-d',strtotime($requestData['start_date']));
+        $requestData['end_date'] = date('Y-m-d',strtotime($requestData['end_date']));
+        $event->update($requestData);
+
+        return redirect('events')->with('flash_message', 'Event updated!');
     }
 
     /**
@@ -124,8 +153,8 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        Mark::destroy($id);
+        Event::destroy($id);
 
-        return redirect('admin/marks')->with('flash_message', 'Mark deleted!');
+        return redirect('admin/events')->with('flash_message', 'Event deleted!');
     }
 }
