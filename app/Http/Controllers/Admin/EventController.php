@@ -12,7 +12,14 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-
+    
+    public function __construct() {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->userId = Auth::user()->id;
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,10 +31,11 @@ class EventController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $events = Event::where('name', 'LIKE', "%$keyword%")
+            $events = Event::where('created_user_id',$this->userId)
+                ->where('name', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $events = Event::latest()->paginate($perPage);
+            $events = Event::where('created_user_id',$this->userId)->latest()->paginate($perPage);
         }
         return view('admin.events.list', compact('events'));
     }
@@ -43,10 +51,12 @@ class EventController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $events = Event::where('name', 'LIKE', "%$keyword%")
+            $events = Event::where('created_user_id',$this->userId)
+                ->where('name', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $events = Event::latest()->paginate($perPage);
+            $events = Event::where('created_user_id',$this->userId)
+                ->latest()->paginate($perPage);
         }
         return view('admin.events.index', compact('events'));
     }
