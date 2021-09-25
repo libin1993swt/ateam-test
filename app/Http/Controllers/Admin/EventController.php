@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
-use App\Http\Traits\StudentTrait;
+use Auth;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    use StudentTrait;
 
     /**
      * Display a listing of the resource.
@@ -85,6 +84,7 @@ class EventController extends Controller
         $requestData = $request->all();
         $requestData['start_date'] = date('Y-m-d',strtotime($requestData['start_date']));
         $requestData['end_date'] = date('Y-m-d',strtotime($requestData['end_date']));
+        $requestData['created_user_id'] = Auth::user()->id;
         
         Event::create($requestData);
 
@@ -139,6 +139,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
         $requestData['start_date'] = date('Y-m-d',strtotime($requestData['start_date']));
         $requestData['end_date'] = date('Y-m-d',strtotime($requestData['end_date']));
+        $requestData['created_user_id'] = Auth::user()->id;
         $event->update($requestData);
 
         return redirect('events')->with('flash_message', 'Event updated!');
