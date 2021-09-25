@@ -7,6 +7,7 @@ use App\Http\Requests;
 use Auth;
 
 use App\Models\Event;
+use App\Models\Invitees;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -23,10 +24,7 @@ class EventController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $events = Event::where('student_id', 'LIKE', "%$keyword%")
-                ->orWhere('mark', 'LIKE', "%$keyword%")
-                ->orWhere('subject', 'LIKE', "%$keyword%")
-                ->orWhere('term', 'LIKE', "%$keyword%")
+            $events = Event::where('name', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $events = Event::latest()->paginate($perPage);
@@ -45,10 +43,7 @@ class EventController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $events = Event::where('student_id', 'LIKE', "%$keyword%")
-                ->orWhere('mark', 'LIKE', "%$keyword%")
-                ->orWhere('subject', 'LIKE', "%$keyword%")
-                ->orWhere('term', 'LIKE', "%$keyword%")
+            $events = Event::where('name', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $events = Event::latest()->paginate($perPage);
@@ -73,8 +68,7 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'name' => 'required',
             'start_date' => 'required|date_format:d-m-Y|date',
@@ -85,8 +79,14 @@ class EventController extends Controller
         $requestData['start_date'] = date('Y-m-d',strtotime($requestData['start_date']));
         $requestData['end_date'] = date('Y-m-d',strtotime($requestData['end_date']));
         $requestData['created_user_id'] = Auth::user()->id;
-        
+
         Event::create($requestData);
+        if(!empty($requestData['invite_user'])) {
+            foreach ($requestData['invite_user'] as $key => $value) {
+                $invitee = Invitees::firstOrNew(array('email' => $value));
+                $invitee->save();
+            }   
+        }
 
         return redirect('events')->with('flash_message', 'Event added!');
     }
@@ -112,8 +112,7 @@ class EventController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $event = Event::findOrFail($id);
         return view('admin.events.edit',compact('event'));
     }
@@ -126,8 +125,7 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         
         $requestData = $request->all();
         $request->validate([
@@ -142,6 +140,13 @@ class EventController extends Controller
         $requestData['created_user_id'] = Auth::user()->id;
         $event->update($requestData);
 
+        if(!empty($requestData['invite_user'])) {
+            foreach ($requestData['invite_user'] as $key => $value) {
+                $invitee = Invitees::firstOrNew(array('email' => $value));
+                $invitee->save();
+            }   
+        }
+
         return redirect('events')->with('flash_message', 'Event updated!');
     }
 
@@ -152,10 +157,9 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         Event::destroy($id);
 
-        return redirect('admin/events')->with('flash_message', 'Event deleted!');
+        return redirect('events')->with('flash_message', 'Event deleted!');
     }
 }

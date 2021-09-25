@@ -20,10 +20,10 @@
 <div class="form-group">
     <label class="control-label">{{ 'Invite People' }}</label>
     <div class="input-group">
-    <input type="text" class="form-control" name="invite_user[]" placeholder="">
-    <div class="input-group-append">
-        <button class="btn btn-info" type="button" id="add_invite_people">Invite People</button>
-    </div>
+        <input type="email" class="form-control" name="invite_user[]" placeholder="">
+        <div class="input-group-append">
+            <button class="btn btn-info" type="button" id="add_invite_people">Invite People</button>
+        </div>
     </div>
 </div>
 
