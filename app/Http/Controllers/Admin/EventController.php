@@ -21,33 +21,14 @@ class EventController extends Controller
             return $next($request);
         });
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function list(Request $request)
-    {
-        $keyword = $request->get('search');
-        $perPage = 25;
-
-        if (!empty($keyword)) {
-            $events = Event::where('created_user_id',$this->userId)
-                ->where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $events = Event::where('created_user_id',$this->userId)->latest()->paginate($perPage);
-        }
-        return view('admin.events.list', compact('events'));
-    }
+    
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\View\View
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $keyword = $request->get('search');
         $perPage = 25;
 
@@ -67,8 +48,7 @@ class EventController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
-    {
+    public function create() {
         return view('admin.events.create');
     }
 
@@ -100,20 +80,6 @@ class EventController extends Controller
         }
 
         return redirect('events')->with('flash_message', 'Event added!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $event = Event::findOrFail($id);
-
-        return view('admin.events.show', compact('event'));
     }
 
     /**

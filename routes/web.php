@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\EventController as PublicEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,8 @@ Route::get('/', function () {
     return redirect('events-list');
 });
 
-Route::any('events-list',[EventController::class, 'list'])->name('events.list');
-Route::get('event/{id}', [EventController::class, 'show'])->name('events.show');
+Route::any('events-list',[PublicEventController::class, 'list'])->name('events.list');
+Route::get('event/{id}', [PublicEventController::class, 'show'])->name('events.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::any('events', [EventController::class, 'index'])->name('events');
