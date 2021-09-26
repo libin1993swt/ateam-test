@@ -74,8 +74,16 @@ class EventController extends Controller
         Event::create($requestData);
         if(!empty($requestData['invite_user'])) {
             foreach ($requestData['invite_user'] as $key => $value) {
-                $invitee = Invitees::firstOrNew(array('email' => $value));
-                $invitee->save();
+                if(!empty($value)) {
+                    $invitee = Invitees::firstOrNew(array('email' => $value));
+                    $invitee->save();
+
+                    $inviteesEventData['event_id'] = $event->id;
+                    $inviteesEventData['invitees_id'] = $invitee->id;
+                    $inviteeEvent = InviteesEvents::firstOrNew(array('event_id' => $event->id, 'invitees_id' => $invitee->id));
+                    $inviteeEvent->save();
+                }
+
             }   
         }
 
