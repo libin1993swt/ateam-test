@@ -22,9 +22,12 @@
     <div class="input-group">
         <input type="email" class="form-control" name="invite_user[]" placeholder="">
         <div class="input-group-append">
-            <button class="btn btn-info" type="button" id="add_invite_people">Invite People</button>
+            <button class="btn btn-info add_invite_people" type="button">Add Invite People</button>
         </div>
-    </div>
+    </div>    
+</div>
+
+<div class="add_div">
 </div>
 
 <div class="form-group">
@@ -39,8 +42,18 @@
         });
     });
 
-    $(document).on('click','#add_invite_people',function(){
+    $(document).on('click','.add_invite_people',function(){
+        $(this).text('Remove Invite People');
+        $(this).addClass('remove_invite_people').removeClass('add_invite_people');
+        $(this).addClass('btn-danger').removeClass('btn-info');
 
+        var content = '<div class="form-group"> <div class="input-group">';
+        content += '<input type="email" class="form-control" name="invite_user[]" placeholder="">';
+        content += '<div class="input-group-append">';
+        content += '<button class="btn btn-info add_invite_people" type="button">Add Invite People</button>';
+        content += '</div> </div> </div>';
+    
+        $('.add_div').append(content);
     });
 </script>
 @endsection
