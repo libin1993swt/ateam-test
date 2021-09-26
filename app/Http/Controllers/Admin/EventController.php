@@ -37,7 +37,7 @@ class EventController extends Controller
                 ->where('name', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $events = Event::where('created_user_id',$this->userId)
+            $events = Event::with('invities_events')->where('created_user_id',$this->userId)
                 ->latest()->paginate($perPage);
         }
         return view('admin.events.index', compact('events'));
@@ -90,7 +90,7 @@ class EventController extends Controller
      * @return \Illuminate\View\View
      */
     public function edit($id) {
-        $event = Event::findOrFail($id);
+        $event = Event::with('invities_events')->findOrFail($id);
         return view('admin.events.edit',compact('event'));
     }
 
@@ -117,15 +117,19 @@ class EventController extends Controller
         $requestData['created_user_id'] = Auth::user()->id;
         $event->update($requestData);
 
+        InviteesEvents::where('event_id', $event->id)->delete();
+
         if(!empty($requestData['invite_user'])) {
             foreach ($requestData['invite_user'] as $key => $value) {
-                $invitee = Invitees::firstOrNew(array('email' => $value));
-                $invitee->save();
+                if(!empty($value)) {
+                    $invitee = Invitees::firstOrNew(array('email' => $value));
+                    $invitee->save();
 
-                $inviteesEventData['event_id'] = $event->id;
-                $inviteesEventData['invitees_id'] = $invitee->id;
-                $inviteeEvent = InviteesEvents::firstOrNew(array('event_id' => $event->id, 'invitees_id' => $invitee->id));
-                $inviteeEvent->save();
+                    $inviteesEventData['event_id'] = $event->id;
+                    $inviteesEventData['invitees_id'] = $invitee->id;
+                    $inviteeEvent = InviteesEvents::firstOrNew(array('event_id' => $event->id, 'invitees_id' => $invitee->id));
+                    $inviteeEvent->save();
+                }
 
             }   
         }

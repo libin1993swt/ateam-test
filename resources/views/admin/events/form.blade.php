@@ -19,6 +19,21 @@
 
 <div class="form-group">
     <label class="control-label">{{ 'Invite People' }}</label>
+</div>
+    @if(!empty($event->invities_events))
+        @foreach($event->invities_events as $invitee)
+        <div class="form-group">
+            <div class="input-group">
+                <input type="email" class="form-control" name="invite_user[]" placeholder="" value="{{ getInviteeEmail($invitee->invitees_id) }}">
+                <div class="input-group-append">
+                    <button class="btn btn-danger remove_invite_people" type="button">Remove Invite People</button>
+                </div>
+            </div>
+        </div>  
+        @endforeach
+    @endif
+
+<div class="form-group">
     <div class="input-group">
         <input type="email" class="form-control" name="invite_user[]" placeholder="">
         <div class="input-group-append">
@@ -54,6 +69,10 @@
         content += '</div> </div> </div>';
     
         $('.add_div').append(content);
+    });
+
+    $(document).on('click','.remove_invite_people',function(){
+        $(this).closest('.form-group').remove();
     });
 </script>
 @endsection

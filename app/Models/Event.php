@@ -36,4 +36,8 @@ class Event extends Model
         'start_date' => 'date:Y-m-d',
         'end_date' => 'date:Y-m-d'
     ];    
+
+    function invities_events() {
+        return $this->hasMany(InviteesEvents::class);
+    }
 }

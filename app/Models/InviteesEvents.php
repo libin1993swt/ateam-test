@@ -27,5 +27,4 @@ class InviteesEvents extends Model
      */
     protected $fillable = ['event_id', 'invitees_id'];
 
-    
 }
