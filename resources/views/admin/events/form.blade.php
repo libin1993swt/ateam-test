@@ -35,7 +35,7 @@
 
 <div class="form-group">
     <div class="input-group">
-        <input type="email" class="form-control" name="invite_user[]" placeholder="">
+        <input type="email" class="form-control invite_user" name="invite_user[]" placeholder="">
         <div class="input-group-append">
             <button class="btn btn-info add_invite_people" type="button">Add Invite People</button>
         </div>
@@ -58,21 +58,43 @@
     });
 
     $(document).on('click','.add_invite_people',function(){
-        $(this).text('Remove Invite People');
-        $(this).addClass('remove_invite_people').removeClass('add_invite_people');
-        $(this).addClass('btn-danger').removeClass('btn-info');
+        var value = $(this).closest('.invite_user').val();
+        if(value != '') {
+            var valid = true;
+            var error = 0;
+            $('.invite_user').each(function(){
+                var email = $(this).val();
+                valid = isEmail(email);
+                if(!valid) {
+                    alert(email+ 'is not a valid email id .Please enter a valid invitees mail id.');
+                    error++;
+                }
+            });
+            if(error = 0) {
+                $(this).text('Remove Invite People');
+                $(this).addClass('remove_invite_people').removeClass('add_invite_people');
+                $(this).addClass('btn-danger').removeClass('btn-info');
 
-        var content = '<div class="form-group"> <div class="input-group">';
-        content += '<input type="email" class="form-control" name="invite_user[]" placeholder="">';
-        content += '<div class="input-group-append">';
-        content += '<button class="btn btn-info add_invite_people" type="button">Add Invite People</button>';
-        content += '</div> </div> </div>';
-    
-        $('.add_div').append(content);
+                var content = '<div class="form-group"> <div class="input-group">';
+                content += '<input type="email" class="form-control" name="invite_user[]" placeholder="">';
+                content += '<div class="input-group-append">';
+                content += '<button class="btn btn-info add_invite_people" type="button">Add Invite People</button>';
+                content += '</div> </div> </div>';
+               
+                $('.add_div').append(content);
+            } 
+        }else {
+            alert('Please enter a valid invitees mail id.');
+        }
     });
 
     $(document).on('click','.remove_invite_people',function(){
         $(this).closest('.form-group').remove();
     });
+
+    function isEmail(email) {
+      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      return regex.test(email);
+    }
 </script>
 @endsection
